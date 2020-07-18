@@ -1,6 +1,7 @@
 package main
 
 import (
+	"hw_server/config"
 	"hw_server/repo"
 	"testing"
 
@@ -9,13 +10,15 @@ import (
 
 // TestInitDB tests db initialization, table creation and default user creation
 func TestInitDB(t *testing.T) {
-	repo.InitDB()
+	config.ReadConfigs()
+	repo.InitDB(config.DBConnectString())
 	user := repo.DefaultUser()
 	assert.Equal(t, user.Username, "Vasya Pupkin", "Username of default user should be Vasya Pupkin")
 }
 
 func TestIncreaseUserBalance(t *testing.T) {
-	repo.InitDB()
+	config.ReadConfigs()
+	repo.InitDB(config.DBConnectString())
 	repo.ResetDefaultUser()
 	repo.IncreaseUserBalance(100)
 	user := repo.DefaultUser()
@@ -23,7 +26,8 @@ func TestIncreaseUserBalance(t *testing.T) {
 }
 
 func TestDecreaseUserBalance(t *testing.T) {
-	repo.InitDB()
+	config.ReadConfigs()
+	repo.InitDB(config.DBConnectString())
 	repo.ResetDefaultUser()
 	repo.IncreaseUserBalance(100)
 	repo.DecreaseUserBalance(50)

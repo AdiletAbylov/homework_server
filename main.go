@@ -2,6 +2,7 @@ package main
 
 import (
 	"hw_server/business"
+	"hw_server/config"
 	"hw_server/handlers"
 	"hw_server/helpers"
 	"hw_server/repo"
@@ -9,10 +10,14 @@ import (
 )
 
 func main() {
-	repo.InitDB()
-	http.HandleFunc("/", handlers.GameHandler)
-	http.ListenAndServe(":5000", nil)
+	config.ReadConfigs()
 
+	repo.InitDB(config.DBConnectString())
 	defer repo.Close()
-	helpers.DoJobEvery(10*60, business.WorkerJob)
+
+	http.HandleFunc("/", handlers.BasicHandler)
+	http.ListenAndServe(config.ServicePort(), nil)
+
+	// start
+	helpers.DoJobEvery(config.JobTimerDuration(), business.WorkerJob)
 }

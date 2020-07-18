@@ -8,8 +8,8 @@ import (
 	"net/http"
 )
 
-// GameHandler validates and parses request, calls business logic.
-func GameHandler(w http.ResponseWriter, request *http.Request) {
+// BasicHandler validates and parses request, calls business logic.
+func BasicHandler(w http.ResponseWriter, request *http.Request) {
 	if !isValidContentType(request.Header) {
 		msg := "Content-Type header is not application/json"
 		http.Error(w, msg, http.StatusUnsupportedMediaType)

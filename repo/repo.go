@@ -11,8 +11,8 @@ import (
 var database *gorm.DB
 
 // InitDB connects to database, makes automigrations and seeds default data
-func InitDB() {
-	conn, err := gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=hw_db sslmode=disable")
+func InitDB(connectString string) {
+	conn, err := gorm.Open("postgres", connectString)
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
 	}

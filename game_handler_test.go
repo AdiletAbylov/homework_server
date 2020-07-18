@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"hw_server/config"
 	"hw_server/handlers"
 	"hw_server/model"
 	"hw_server/repo"
@@ -21,7 +22,7 @@ func TestGameHandler(t *testing.T) {
 	}
 
 	recorder := httptest.NewRecorder()
-	handler := http.HandlerFunc(handlers.GameHandler)
+	handler := http.HandlerFunc(handlers.BasicHandler)
 	handler.ServeHTTP(recorder, req)
 	assert.Equal(t, http.StatusUnsupportedMediaType, recorder.Code, "Should return 415 because content-type is not set")
 
@@ -50,7 +51,8 @@ func TestGameHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	recorder = httptest.NewRecorder()
-	repo.InitDB()
+	config.ReadConfigs()
+	repo.InitDB(config.DBConnectString())
 	handler.ServeHTTP(recorder, req)
 	assert.Equal(t, http.StatusOK, recorder.Code, "Should return 200")
 	user := repo.DefaultUser()
