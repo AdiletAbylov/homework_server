@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+
 	"hw_server/business"
 	"hw_server/model"
 	"net/http"
@@ -16,12 +17,17 @@ func GameHandler(w http.ResponseWriter, request *http.Request) {
 	}
 	if !isValidSourceType(request.Header) {
 		msg := "Source-Type header is not valid"
-		http.Error(w, msg, http.StatusInternalServerError)
+		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 	sourceType := request.Header.Get("Source-Type")
-	event := model.GameEvent{
+	event := model.Event{
 		SourceType: sourceType,
+	}
+	if request.Body == nil {
+		msg := "JSON decoding error: empty body."
+		http.Error(w, msg, http.StatusBadRequest)
+		return
 	}
 	err := json.NewDecoder(request.Body).Decode(&event)
 	if err != nil {
@@ -30,7 +36,28 @@ func GameHandler(w http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	business.HandleGameEvent(event)
+	switch event.SourceType {
+	case model.SourceGame:
+		err := business.HandleGameEvent(&event)
+		if err != nil {
+			msg := "Transaction processing error: " + err.Error()
+			http.Error(w, msg, http.StatusInternalServerError)
+			return
+		}
+	case model.SourceServer:
+		business.HandleServerEvent(&event)
+		msg := "Server events are not supported "
+		http.Error(w, msg, http.StatusNotImplemented)
+		return
+
+	case model.SourcePayment:
+		business.HandlePaymentEvent(&event)
+		msg := "Payment events are not supported "
+		http.Error(w, msg, http.StatusNotImplemented)
+		return
+
+	}
+
 }
 
 func isValidSourceType(header http.Header) bool {

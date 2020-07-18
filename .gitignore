@@ -21,3 +21,6 @@
 /Godeps/
 # snapshot files
 *.tgz
+
+# binary app file
+hw_server
