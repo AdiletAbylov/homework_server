@@ -33,5 +33,6 @@ func DBConnectString() string {
 		" port=" + viper.GetString("DB_PORT") +
 		" user=" + viper.GetString("DB_USER") +
 		" dbname=" + viper.GetString("DB_NAME") +
+		" password=" + viper.GetString("DB_PASS") +
 		" sslmode=disable"
 }

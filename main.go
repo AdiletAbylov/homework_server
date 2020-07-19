@@ -18,6 +18,6 @@ func main() {
 	http.HandleFunc("/", handlers.BasicHandler)
 	http.ListenAndServe(config.ServicePort(), nil)
 
-	// start
+	// start job
 	helpers.DoJobEvery(config.JobTimerDuration(), business.WorkerJob)
 }

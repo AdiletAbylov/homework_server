@@ -17,7 +17,6 @@ func InitDB(connectString string) {
 		panic("Failed to connect to database: " + err.Error())
 	}
 	database = conn
-	database.DropTable(&model.TransactionsModel{})
 
 	database.AutoMigrate(&model.TransactionsModel{})
 	database.AutoMigrate(&model.UserBalanceModel{})
