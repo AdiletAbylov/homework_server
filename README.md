@@ -9,6 +9,7 @@ Simple server build on `net/http`. Using `github.com/jinzhu/gorm` as ORM.
 ### Requirements
 
 Golang >= 1.14
+
 Postgres database.
 
 ### Build
