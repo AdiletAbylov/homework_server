@@ -23,7 +23,8 @@ func ServicePort() string {
 
 // JobTimerDuration returns duration for worker job
 func JobTimerDuration() time.Duration {
-	return time.Duration(viper.GetInt64("JOB_TIMER_SEC"))
+
+	return time.Duration(viper.GetInt("JOB_TIMER_SEC"))
 }
 
 // DBConnectString returns database connect string.
